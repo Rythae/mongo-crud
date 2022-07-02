@@ -38,14 +38,23 @@ const createTodo = async (req, res) => {
 const updateTodo = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const updateTodo = await Todo.findByIdAndUpdate(req.params.id, { title, description });
-    if (!updateTodo) {
-      return res.status(200).json({
-        success: true,
-        message: "Todo updated successfully",
-        data: updateTodo,
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { title, description },
+      { new: true }
+    );
+    if (!updatedTodo) {
+      return res.status(500).json({
+        success: false,
+        message: "Server error. Please try again.",
+        error: err.message,
       });
     }
+    return res.status(200).json({
+      success: true,
+      message: "Todo updated successfully",
+      data: updatedTodo,
+    });
   } catch (err) {
      return res.status(500).json({
        success: false,
@@ -57,14 +66,19 @@ const updateTodo = async (req, res) => {
 
 const deleteTodo = async (req, res) => {
   try {
-    const deleteTodo = await Todo.findByIdAndDelete(req.params.id);
-     if (!deleteTodo) {
-       return res.status(200).json({
-         success: true,
-         message: "Todo deleted successfully",
-         data: deleteTodo,
+    const deletedTodo = await Todo.findByIdAndDelete(req.params.id);
+    if (!deletedTodo) {
+       return res.status(500).json({
+         success: false,
+         message: "Server error. Please try again.",
+         error: err.message,
        });
-     }
+      }
+      return res.status(200).json({
+        success: true,
+        message: "Todo deleted successfully",
+        data: deletedTodo,
+      });
   } catch (err) {
      return res.status(500).json({
        success: false,
