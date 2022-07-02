@@ -9,7 +9,11 @@ const getAllTodos = async (req, res) => {
       data: todos,
     });
   } catch (err) {
-    return res.status(500).json({ message: err });
+    return res.status(500).json({
+      success: false,
+      message: "Server error. Please try again.",
+      error: err.message,
+    });
   }
 };
 
@@ -47,7 +51,6 @@ const updateTodo = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Server error. Please try again.",
-        error: err.message,
       });
     }
     return res.status(200).json({
@@ -71,7 +74,6 @@ const deleteTodo = async (req, res) => {
        return res.status(500).json({
          success: false,
          message: "Server error. Please try again.",
-         error: err.message,
        });
       }
       return res.status(200).json({
